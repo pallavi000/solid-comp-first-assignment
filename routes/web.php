@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RestrictionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,4 +25,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+// ip restricted routes
+Route::middleware(['auth', 'ip-restriction'])->group(function () {
+    Route::get("/restricted", [RestrictionController::class, 'restricted'])->name('restricted.home');
+});
+
+
+require __DIR__ . '/auth.php';
