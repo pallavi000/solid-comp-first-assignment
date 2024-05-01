@@ -20,7 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'allowed_ip'
+        'allowed_ip',
+        'is_admin'
     ];
 
     /**

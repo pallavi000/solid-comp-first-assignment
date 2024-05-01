@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-
-class IpRestriction
+class IsAdminMiddleware
 {
     /**
      * Handle an incoming request.
@@ -19,21 +18,9 @@ class IpRestriction
     {
         $user = Auth::user();
 
-        if ($user && $this->isIpAllowed($request->ip(), $user->allowed_ip)) {
+        if ($user && $user->is_admin) {
             return $next($request);
         }
-
-        abort(403, 'IP address not authorized');
-    }
-
-    private function isIpAllowed($ip, $allowedIps)
-    {
-        if ($allowedIps === null) {
-            return false;
-        }
-
-        $allowedIpsArray = json_decode($allowedIps, true);
-
-        return in_array($ip, $allowedIpsArray);
+        abort(403, 'Not enough permission.');
     }
 }
